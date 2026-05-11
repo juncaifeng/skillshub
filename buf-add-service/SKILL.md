@@ -226,7 +226,7 @@ curl -X POST -d '{"product_id":"p1","quantity":2}' http://localhost:8080/v1/orde
 ## Gotchas
 
 - `buf generate` 生成的 pb 包 import path 是 `<module>/gen/<version>`，务必与 `go.mod` 的 module 一致
-- 新增服务后如果忘记更新 `cmd/server/main.go` 的 import，编译会报 `undefined: pb.RegisterXxxServer`
+- 新增服务后**不需要**在 `main.go` 中新增 import（`gen/v1` 和 `server/grpc` 包已由 Greeter 导入），只需添加注册行
 - gRPC 和 HTTP 两处注册缺一不可：漏 gRPC → 504 超时，漏 HTTP → 404
 - 方法实现文件必须放在 `server/grpc/` 包中，与 `GreeterServer` 同级
 - `UnimplementedXxxServer` 是 protoc-gen-go-grpc 生成的兜底实现，务必嵌入 struct

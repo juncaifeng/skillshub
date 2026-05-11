@@ -3,30 +3,33 @@ name: buf-add-micro
 description: >
   Create a new independent Go microservice project using buf + grpc-gateway
   as a subdirectory within an existing monorepo. Generates its own go.mod,
-  buf config, proto files, server implementation, and main.go. Use this
-  skill when the user wants to create a standalone deployable service, add
-  a new microservice to a monorepo, or explicitly says "独立服务" / "新建微服务"
-  / "单独部署" in a Go gRPC context. Not for adding a service to an existing
-  process — use buf-add-service for that.
-compatibility: Requires Go 1.21+, buf CLI, existing project root with buf-grpc-gateway-scaffold skill available for reference.
+  buf config, proto files, server implementation, and main.go with built-in
+  HTTP gateway (BFF pattern). Use this skill ONLY when the service needs its
+  own HTTP gateway (e.g. independent BFF, external-facing service without
+  a shared gateway). For most backend services behind a unified gateway,
+  use buf-add-grpc-svc instead — it avoids redundant HTTP gateways.
+compatibility: Requires Go 1.21+, buf CLI, existing project root.
 metadata:
   author: skillshub
   version: "1.0"
 ---
 
-# 新建独立微服务
+# 新建独立微服务（BFF 模式）
 
-在现有 monorepo 中创建一个完全独立的 gRPC 微服务项目（独立 go.mod、main.go、部署单元）。
+在现有 monorepo 中创建一个带**自有 HTTP Gateway** 的独立微服务（独立 go.mod、main.go、部署单元）。
 
-与 `buf-add-service` 的区别：
+> ⚠️ **大多数场景请使用 `buf-add-grpc-svc`** — 如果已有统一 gateway，后端服务应该是纯 gRPC 的。
+> 本 skill 仅适用于 BFF (Backend For Frontend) 场景或独立的对外服务。
 
-| | buf-add-service | buf-add-micro |
-|---|---|---|
-| go.mod | 共用 | 独立 |
-| main.go | 追加注册 | 全新文件 |
-| 部署 | 一个二进制多 service | 一个 service 一个二进制 |
-| 接口 | 走同一个端口 | 独立端口 |
-| 目录 | 放在现有 api/server/ 下 | 独立子目录 |
+## 与相关技能的区别
+
+| | buf-add-service | buf-add-grpc-svc | buf-add-micro |
+|---|---|---|---|
+| HTTP Gateway | 注册到已有 | ❌ 无 | ✅ 自建一套 |
+| 场景 | monolith 加功能 | 统一网关后的后端 | BFF / 独立对外 |
+| 认证 | 网关统一 | 网关统一 | 需自配 |
+| go.mod | 共用 | 独立 | 独立 |
+| 推荐度 | 小项目 | ⭐ 推荐 | 特定场景 |
 
 ## 检查清单
 
