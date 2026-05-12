@@ -23,6 +23,12 @@ HTTP 请求 → Gateway (:8080) ──gRPC── ▶ auth-service (:9091)
 | `buf-add-micro` | BFF 场景 | 独立微服务（自带 HTTP Gateway，仅用于独立对外场景） |
 | `buf-maintain` | 日常维护 | lint / breaking check / generate / mod update / build |
 
+### 通用工具
+
+| 技能 | 说明 |
+|------|------|
+| `git-submodule-add` | 添加 GitHub 仓库为子模块，统一放到 `ref/` 下 |
+
 ### 选型指南
 
 ```
